@@ -57,7 +57,6 @@ function App() {
 
       <Route exact path="/user/asdasd" element={<UserInfo />} />
 
-      <Route exact path="/user/asdasd" element={<UserInfo />} />
        
       <Route element={<Page404 />} />
       </Routes>
