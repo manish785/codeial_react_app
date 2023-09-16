@@ -43,23 +43,20 @@ function App() {
 
   return (
     <div className="App">
-    <Navbar />
     <Router>
-      <Routes>
-      <Route exact path="/" element={<Home posts={posts} />}/>
-       
-
-      <Route exact path="/login"  element={<Login />} />
-      
-
-      <Route exact path="/about" element={<About />} />
-       
-
-      <Route exact path="/user/asdasd" element={<UserInfo />} />
-
-       
-      <Route element={<Page404 />} />
-      </Routes>
+      <Navbar />
+        <Routes>
+          <Route exact path="/" element={<Home posts={posts} />}/>
+          
+          <Route exact path="/login"  element={<Login />} />
+          
+          <Route exact path="/about" element={<About />} />
+          
+          <Route exact path="/user/asdasd" element={<UserInfo />} />
+          
+          <Route element={<Page404 />} />
+        </Routes>
+    
     </Router>
   </div>
 
