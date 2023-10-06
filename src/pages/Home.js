@@ -1,20 +1,49 @@
-import PropTypes from 'prop-types';
-
+import { useEffect, useState } from 'react';
+import {Link} from 'react-router-dom';
+import { Loader } from '../components';
+import { getPosts } from '../api';
 import styles from '../styles/home.module.css';
 
-const Home = ({ posts }) => {
+const Home = () => {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await getPosts();
+      // console.log(response);
+
+      if (response.success) {
+        setPosts(response.data.posts);
+      }
+
+      setLoading(false);
+    };
+
+    fetchPosts();
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <div className={styles.postsList}>
       {posts.map((post) => (
         <div className={styles.postWrapper} key={`post-${post._id}`}>
           <div className={styles.postHeader}>
             <div className={styles.postAvatar}>
-              <img
+            <img
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMlJQT1Rc7EKivuy0WFsA1IwFsIIhvricvExrQaUg&s"
                 alt="user-pic"
               />
               <div>
-                <span className={styles.postAuthor}>{post.user.name}</span>
+              <Link
+                  to={`/user/${post.user._id}`}
+                  className={styles.postAuthor}
+                >
+                  {post.user.name}
+                </Link>
                 <span className={styles.postTime}>a minute ago</span>
               </div>
             </div>
@@ -22,7 +51,7 @@ const Home = ({ posts }) => {
 
             <div className={styles.postActions}>
               <div className={styles.postLike}>
-                <img
+              <img
                   src="https://png.pngtree.com/png-clipart/20190516/original/pngtree-facebook-like-icon-png-image_3584862.jpg"
                   alt="likes-icon"
                 />
@@ -30,11 +59,11 @@ const Home = ({ posts }) => {
               </div>
 
               <div className={styles.postCommentsIcon}>
-                <img
+              <img
                   src="https://i.pinimg.com/736x/44/bd/61/44bd61eb2334919917cbf80e025501aa.jpg"
                   alt="comments-icon"
                 />
-                <span>2</span>
+                <span>{post.comments.length}</span>
               </div>
             </div>
             <div className={styles.postCommentBox}>
@@ -42,25 +71,15 @@ const Home = ({ posts }) => {
             </div>
 
             <div className={styles.postCommentsList}>
-              <div className={styles.postCommentsItem}>
-                <div className={styles.postCommentHeader}>
-                  <span className={styles.postCommentAuthor}>Bill</span>
-                  <span className={styles.postCommentTime}>a minute ago</span>
-                  <span className={styles.postCommentLikes}>22</span>
-                </div>
-
-                <div className={styles.postCommentContent}>Random comment</div>
-              </div>
+              {/* {post.comments.map((comment) => (
+                // <Comment comment={comment} />
+              ))} */}
             </div>
           </div>
         </div>
       ))}
     </div>
   );
-};
-
-Home.propTypes = {
-  posts: PropTypes.array.isRequired,
 };
 
 export default Home;

@@ -1,65 +1,63 @@
-import { useEffect, useState } from 'react';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
-// import { Route, Routes } from 'react-router-dom';
+import {BrowserRouter as Router, redirect, Route, Routes} from 'react-router-dom'
+import { Navigate } from 'react-router-dom';
+import { useAuth } from '../hooks';
+import { Home, Login, Signup, Settings, UserProfile } from '../pages';
+import { Loader, Navbar } from './index';
 
+function PrivateRoute({ children, ...rest}){
+    const auth = useAuth();
 
-import { getPosts } from '../api';
-import { Home, Login } from '../pages';
-import { Loader, Navbar } from './';
+    return (
+      <Route
+         {...rest}
+         render={()=>{
+           if(auth.user){
+             return children;
+           }
 
-const About = () =>{
-  return <h1> About </h1>
-};
-
-const UserInfo = () =>{
-  return <h1> User </h1>
-};
+           return <Navigate to='/login'/>
+         }}
+      />
+    )
+}
 
 const Page404 = () => {
-  return <h1> Page Not Found! </h1>
+  return <h1>Page 404</h1>;
 };
 
+
 function App() {
-  const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const auth = useAuth();
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await getPosts();
-
-      if (response.success) {
-        setPosts(response.data.posts);
-      }
-
-      setLoading(false);
-    };
-
-    fetchPosts();
-  }, []);
-
-  if (loading) {
+  if (auth.loading) {
     return <Loader />;
   }
 
+  const routes = (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Signup />} />
+      {/* Protected route */}
+      <Route
+        path="/settings"
+        element={auth.user ? <Settings /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/user/:userId"
+        element={auth.user ? <UserProfile /> : <Navigate to="/login" />}
+      />
+      <Route path="*" element={<Page404 />} />
+    </Routes>
+  );
+
   return (
     <div className="App">
-    <Router>
-      <Navbar />
-        <Routes>
-          <Route exact path="/" element={<Home posts={posts} />}/>
-          
-          <Route exact path="/login"  element={<Login />} />
-          
-          <Route exact path="/about" element={<About />} />
-          
-          <Route exact path="/user/asdasd" element={<UserInfo />} />
-          
-          <Route element={<Page404 />} />
-        </Routes>
-    
-    </Router>
-  </div>
-
+      <Router>
+        <Navbar />
+        {routes}
+      </Router>
+    </div>
   );
 }
 
