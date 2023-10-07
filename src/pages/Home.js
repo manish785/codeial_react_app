@@ -26,7 +26,12 @@ const Home = () => {
   if (loading) {
     return <Loader />;
   }
+  console.log('posts', posts);
+  console.log('hiiiii', posts[0].user)
 
+  // const data = {
+  //   name:'manish'
+  // }
   return (
     <div className={styles.postsList}>
       {posts.map((post) => (
@@ -39,7 +44,14 @@ const Home = () => {
               />
               <div>
               <Link
-                  to={`/user/${post.user._id}`}
+                  to={{
+                    pathname: `/user/${post.user._id}`,
+                  }}
+                  state= {
+                    // user: post.user,
+                    // data: data.name,
+                    post.user
+                  } 
                   className={styles.postAuthor}
                 >
                   {post.user.name}
