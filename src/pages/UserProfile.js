@@ -5,11 +5,13 @@ import { Loader } from '../components';
 import styles from '../styles/settings.module.css';
 import { useAuth } from '../hooks';
 import { useEffect, useState } from 'react';
-import { fetchUserProfile } from '../api';
+import { fetchUserProfile, addFriend, removeFriend } from '../api';
 
 const UserProfile = () => {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
+  const [requestInProgress, setrequestInProgress] = useState(false);
+
   const { userId } = useParams();
   const { addToast } = useToasts();
   const history = useNavigate();
@@ -41,7 +43,7 @@ const UserProfile = () => {
   // console.log('user', user);
 
   const checkIfUserIsAFriend = () => {
-    const friends = auth.user.friendships;
+    const friends = auth.user.friends;
     
    
     const friendIds = friends.map((friend) => friend.to_user._id);
@@ -52,6 +54,50 @@ const UserProfile = () => {
     }
     return false;
   };
+
+  const handleRemoveFriendClick = async () => {
+    setrequestInProgress(true);
+
+    const response = await removeFriend(userId);
+
+    if(response.success){
+      const friendship = auth.user.friends.filter(
+        (friend) => friend.to_user._id == userId
+      );
+
+      auth.updateUserFriends(false, friendship[0]);
+      addToast('Friend removed successfully', {
+        appearance: 'success',
+      })
+    }else{
+      addToast(response.message, {
+        appearance: 'error',
+      })
+    }
+
+    setrequestInProgress(false);
+  }
+
+  const handleAddFriendClick = async () => {
+       setrequestInProgress(true);
+
+      const response = await addFriend(userId);
+
+      if(response.success){
+        const { friendship } = response.data;
+
+        auth.updateUserFriends(true, friendship);
+        addToast('Friend added successfully', {
+          appearance: 'success',
+        })
+      }else{
+        addToast(response.message, {
+          appearance: 'error',
+        })
+      }
+
+      setrequestInProgress(false);
+  }
 
   return (
     <div className={styles.settings}>
@@ -75,9 +121,20 @@ const UserProfile = () => {
 
       <div className={styles.btnGrp}>
         {checkIfUserIsAFriend() ? (
-          <button className={`button ${styles.saveBtn}`}>Remove friend</button>
+          <button
+            className={`button ${styles.saveBtn}`}
+            onClick={handleRemoveFriendClick}
+          >
+            {requestInProgress ? 'Removing friend...' : 'Remove friend'}
+          </button>
         ) : (
-          <button className={`button ${styles.saveBtn}`}>Add friend</button>
+          <button
+            className={`button ${styles.saveBtn}`}
+            onClick={handleAddFriendClick}
+            disabled={requestInProgress}
+          >
+            {requestInProgress ? 'Adding friend...' : 'Add friend'}
+          </button>
         )}
       </div>
     </div>

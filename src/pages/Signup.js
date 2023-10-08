@@ -45,7 +45,7 @@ const Signup = () => {
     }
 
     const response = await auth.signup(name, email, password, confirmPassword);
-
+    console.log(response);
     if (response.success) {
       setSigningUp(false);
 
