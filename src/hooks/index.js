@@ -1,13 +1,13 @@
 import { useContext, useState, useEffect } from 'react';
 import jwt from 'jwt-decode';
 
-import { AuthContext } from '../providers/AuthProvider';
+import { AuthContext, PostsContext } from '../providers';
 import {
-  addFriend,
   editProfile,
   fetchUserFriends,
   login as userLogin,
   register,
+  getPosts,
 } from '../api';
 import {
   setItemInLocalStorage,
@@ -30,16 +30,14 @@ export const useProvideAuth = () => {
 
       if (userToken) {
         const user = jwt(userToken);
-        console.log('user', user);
         const response = await fetchUserFriends();
-        console.log('res', response);
 
         let friends = [];
 
         if (response.success) {
           friends = response.data.friends;
         }
-        console.log('friends', friends);
+
         setUser({
           ...user,
           friends,
@@ -114,24 +112,23 @@ export const useProvideAuth = () => {
   };
 
   const updateUserFriends = (addFriend, friend) => {
-      if(addFriend){
-        setUser({
-          ...user,
-          friends: [...user.friends, friend],
-        })
-        return;
-      }
-
-      const newFriends = user.friends.filter(
-        (f) => f.to_user._id !== friend.to_user._id
-      )
-
+    if (addFriend) {
       setUser({
         ...user,
-        friends: newFriends
-      })
-  }
+        friends: [...user.friends, friend],
+      });
+      return;
+    }
 
+    const newFriends = user.friends.filter(
+      (f) => f.to_user._id !== friend.to_user._id
+    );
+
+    setUser({
+      ...user,
+      friends: newFriends,
+    });
+  };
 
   return {
     user,
@@ -140,6 +137,44 @@ export const useProvideAuth = () => {
     loading,
     signup,
     updateUser,
-    updateUserFriends
+    updateUserFriends,
+  };
+};
+
+export const usePosts = () => {
+  return useContext(PostsContext);
+};
+
+export const useProvidePosts = () => {
+  const [posts, setPosts] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await getPosts();
+
+      if (response.success) {
+        setPosts(response.data.posts);
+      }
+
+      setLoading(false);
+    };
+
+    fetchPosts();
+  }, []);
+
+  const addPostToState = (post) => {
+    const newPosts = [post, ...posts];
+
+    setPosts(newPosts);
+  };
+
+
+  
+
+  return {
+    data: posts,
+    loading,
+    addPostToState,
   };
 };

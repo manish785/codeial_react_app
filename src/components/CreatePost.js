@@ -3,12 +3,14 @@ import styles from '../styles/home.module.css';
 import { useToasts } from 'react-toast-notifications';
 
 import { addPost } from '../api';
+import { usePosts } from '../hooks';
 
 
 const CreatePost = () => {
     const [post, setPosts] = useState('');
     const [addingPost, setaddingPost] = useState(false);
     const { addToast } = useToasts();
+    const posts = usePosts();
 
     const handleAddPostClick = async () => {
         setaddingPost(true);
@@ -16,6 +18,7 @@ const CreatePost = () => {
         const response = await addPost(post);
         if(response.success){
             setPosts('');
+            posts.addPostToState(response.data.post);
             addToast('Post created succesfully', {
                 appearance: 'success'
             })
