@@ -1,31 +1,18 @@
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
-import { Navigate } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks';
 import { Home, Login, Signup, Settings, UserProfile } from '../pages';
 import { Loader, Navbar } from './index';
 
-function PrivateRoute({ children, ...rest}){
-    const auth = useAuth();
-    
+function PrivateRoute({ element: Element, ...rest }) {
+  const auth = useAuth();
 
-    return (
-      <Route
-         {...rest}
-         render={()=>{
-           if(auth.user){
-             return children;
-           }
-
-           return <Navigate to='/login'/>
-         }}
-      />
-    )
+  return auth.user ? <Element {...rest} /> : <Navigate to="/login" />;
 }
 
 const Page404 = () => {
   return <h1>Page 404</h1>;
 };
-
 
 function App() {
   const auth = useAuth();
@@ -35,34 +22,27 @@ function App() {
   }
 
   const routes = (
-      <Routes>
-        <Route path="/" element={<Signup />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/home-page" element={<Home />} />
+    <Routes>
+      <Route path="/" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/home-page" element={<Home />} />
+      
+      {/* Protected routes */}
+      <Route path="/settings" element={<PrivateRoute element={Settings} />} />
+      <Route path="/user/:userId" element={<PrivateRoute element={UserProfile} />} />
 
-        {/* Protected route */}
-        <Route
-          path="/settings"
-          element={auth.user ? <Settings /> : <Navigate to="/login" />}
-        />
-        <Route
-          path="/user/:userId"
-          element={auth.user ? <UserProfile /> : <Navigate to="/login" />}
-        />
-        <Route path="*" element={<Page404 />} />
-      </Routes>
+      <Route path="*" element={<Page404 />} />
+    </Routes>
   );
 
   return (
-      <div className="App">
-        <Router>
-          {console.log(auth.user)}
-          {auth.user ? <Navbar /> : <Navigate to="/login" /> }
-          {routes}
-        </Router>
-      </div>
+    <div className="App">
+      <Router>
+        {auth.user && <Navbar />}
+        {routes}
+      </Router>
+    </div>
   );
 }
-
 
 export default App;

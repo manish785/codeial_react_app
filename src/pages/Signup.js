@@ -66,7 +66,7 @@ const SignUp = () => {
     // }
 
     return(
-        <div className='mt-[-60px]'>
+        <div className=''>
             <div className='absolute'>
                 <img 
                   className='h-screen w-screen object-cover'

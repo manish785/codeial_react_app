@@ -26,7 +26,7 @@ const Navbar = () => {
         const response = await searchUsers(searchText);
 
         if(response.success){
-          setResults(response.data.users);
+          setResults();
         }
       }
 
@@ -53,11 +53,13 @@ const Navbar = () => {
     const handleSignOut = () => {
       setUser(null);
       removeItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
+      auth.user = null;
       return navigate('/login');
     }
    
  
     return (
+      
       <div className={styles.nav}>
         <div className={styles.leftDiv}>
           <Link to="/">
@@ -69,19 +71,24 @@ const Navbar = () => {
         </div>
 
       <div className={styles.searchContainer}>
-        <img
-          className={styles.searchIcon}
-          src="https://png.pngtree.com/png-vector/20190115/ourmid/pngtree-vector-search-icon-png-image_320926.jpg"
-          alt=""
-        />
+        {auth.user && (
+            <img
+            className={styles.searchIcon}
+            src="https://png.pngtree.com/png-vector/20190115/ourmid/pngtree-vector-search-icon-png-image_320926.jpg"
+            alt=""
+          />
+        )
+        }
+      
+        {auth.user && (
+             <input
+             placeholder="Search users"
+             value={searchText}
+             onChange={(e) => setSearchText(e.target.value)}
+           />
+        )}
 
-        <input
-          placeholder="Search users"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-
-        {results.length > 0 && (
+        {auth.user && results.length > 0 && (
           <div className={styles.searchResults}>
             <ul>
               {results.map((user) => (
@@ -130,7 +137,7 @@ const Navbar = () => {
                   <Link to="/login">Log in</Link>
                 </li>
                 <li>
-                  <Link to="/register">Register</Link>
+                  <Link to="/">Sign Up</Link>
                 </li>
               </>
             )}
