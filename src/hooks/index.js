@@ -92,6 +92,11 @@ export const useProvideAuth = () => {
       }
   };
 
+  const logout = () => {
+    setUser(null);
+    removeItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
+  }
+
   const signup = async (name, email, password, confirmPassword) => {
       const response = await register(name, email, password, confirmPassword);
 
@@ -130,6 +135,7 @@ export const useProvideAuth = () => {
     user,
     login,
     loading,
+    logout,
     signup,
     updateUser,
     updateUserFriends,

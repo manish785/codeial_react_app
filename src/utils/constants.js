@@ -22,7 +22,7 @@ export const API_URLS = {
   searchUsers: (searchText) => `${API_ROOT}/users/search?text=${searchText}`,
 };
 
-export const BG_URL = 'https://img.freepik.com/premium-psd/smartphone-mockup-with-3d-facebook-icon_274703-84.jpg?w=1060'
+export const BG_URL = 'https://images.pexels.com/photos/633409/pexels-photo-633409.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
 
 
 export const LOCALSTORAGE_TOKEN_KEY = '__codeial_token__';
