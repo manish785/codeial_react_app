@@ -1,5 +1,13 @@
 import { useState, useEffect} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import jwt from 'jwt-decode';
+
+import {
+  setItemInLocalStorage,
+  LOCALSTORAGE_TOKEN_KEY,
+  removeItemFromLocalStorage,
+  getItemFromLocalStorage,
+} from '../utils';
 
 import styles from '../styles/navbar.module.css';
 import { useAuth } from '../hooks';
@@ -8,7 +16,10 @@ import { searchUsers } from '../api';
 const Navbar = () => {
     const [results, setResults] = useState([]);
     const [searchText, setSearchText] = useState('');
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     const auth = useAuth();
+    const navigate = useNavigate();
 
     useEffect(()=>{
       const fetchUsers = async () =>{
@@ -25,6 +36,25 @@ const Navbar = () => {
         setResults([]);
       }
     }, [searchText]);
+
+    useEffect(() => {
+        const getUser = async () => {
+          const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
+          if(userToken){
+              const user = jwt(userToken);
+
+              setUser({...user});
+          }
+          setLoading(false);
+        }
+        getUser();
+    }, []);
+
+    const handleSignOut = () => {
+      setUser(null);
+      removeItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
+      return navigate('/login');
+    }
    
  
     return (
@@ -92,7 +122,7 @@ const Navbar = () => {
             {auth.user ? (
               
               <>
-                <li className='ml-7 mt-2' onClick={auth.logout}>Log out</li>
+                <li className='ml-7 mt-2' onClick={handleSignOut}>Log out</li>
               </>
             ) : (
               <>
