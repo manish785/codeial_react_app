@@ -53,7 +53,7 @@ const Login = () => {
     }  
 
     return(
-        <div className=''>
+        <div className='mt-[-60px]'>
             <div className='absolute'>
                 <img 
                     className='w-screen h-screen object-cover'

@@ -56,7 +56,8 @@ function App() {
   return (
       <div className="App">
         <Router>
-          {auth.user && <Navbar/> }
+          {console.log(auth.user)}
+          {auth.user ? <Navbar /> : <Navigate to="/login" /> }
           {routes}
         </Router>
       </div>
