@@ -6,37 +6,37 @@ import { useAuth } from '../hooks';
 import { searchUsers } from '../api';
 
 const Navbar = () => {
-  const [results, setResults] = useState([]);
-  const [searchText, setSearchText] = useState('');
-  const auth = useAuth();
+    const [results, setResults] = useState([]);
+    const [searchText, setSearchText] = useState('');
+    const auth = useAuth();
 
-  useEffect(()=>{
-    const fetchUsers = async () =>{
-      const response = await searchUsers(searchText);
+    useEffect(()=>{
+      const fetchUsers = async () =>{
+        const response = await searchUsers(searchText);
 
-      if(response.success){
-        setResults(response.data.users);
+        if(response.success){
+          setResults(response.data.users);
+        }
       }
-    }
 
-    if(searchText.length > 2){
-      fetchUsers();
-    }else{
-      setResults([]);
-    }
-  }, [searchText]);
+      if(searchText.length > 2){
+        fetchUsers();
+      }else{
+        setResults([]);
+      }
+    }, [searchText]);
    
-  console.log(auth);
-  return (
-    <div className={styles.nav}>
-      <div className={styles.leftDiv}>
-        <Link to="/">
-          <img
-            alt=""
-            src="https://ninjasfiles.s3.amazonaws.com/0000000000003454.png"
-          />
-        </Link>
-      </div>
+ 
+    return (
+      <div className={styles.nav}>
+        <div className={styles.leftDiv}>
+          <Link to="/">
+            <img
+              alt=""
+              src="https://ninjasfiles.s3.amazonaws.com/0000000000003454.png"
+            />
+          </Link>
+        </div>
 
       <div className={styles.searchContainer}>
         <img
@@ -92,7 +92,7 @@ const Navbar = () => {
             {auth.user ? (
               
               <>
-                <li onClick={auth.logout}>Log out</li>
+                <li className='ml-7 mt-2' onClick={auth.logout}>Log out</li>
               </>
             ) : (
               <>
@@ -110,5 +110,6 @@ const Navbar = () => {
     </div>
   );
 };
+
 
 export default Navbar;

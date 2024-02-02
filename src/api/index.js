@@ -1,5 +1,6 @@
 import { API_URLS, getFormBody, LOCALSTORAGE_TOKEN_KEY } from '../utils';
 
+
 const customFetch = async (url, { body, ...customConfig }) => {
   const token = window.localStorage.getItem(LOCALSTORAGE_TOKEN_KEY);
 
@@ -36,13 +37,13 @@ const customFetch = async (url, { body, ...customConfig }) => {
 
     throw new Error(data.message);
   } catch (error) {
-    // console.error('error');
     return {
       message: error.message,
       success: false,
     };
   }
 };
+
 
 export const getPosts = (page = 1, limit = 5) => {
   return customFetch(API_URLS.posts(page, limit), {
@@ -80,6 +81,7 @@ export const fetchUserProfile = ( userId ) => {
     method: 'GET'
   });
 };
+
 
 export const fetchUserFriends = ( ) => {
   return customFetch(API_URLS.friends(), {
@@ -135,20 +137,3 @@ export const searchUsers =  (searchText) => {
     method: 'GET',
   });
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

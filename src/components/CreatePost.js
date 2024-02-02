@@ -36,20 +36,21 @@ const CreatePost = () => {
             className={styles.addPost}
             value={post}
             onChange={(e) => setPosts(e.target.value)}
-          />
+        />
     
-          <div>
-            <button
-              className={styles.addPostBtn}
-              onClick={handleAddPostClick}
-              disabled={addingPost}
-            >
-              {addingPost ? 'Adding post...' : 'Add post'}
-            </button>
-          </div>
+        <div>
+          <button
+            className={styles.addPostBtn}
+            onClick={handleAddPostClick}
+            disabled={addingPost}
+          >
+            {addingPost ? 'Adding post...' : 'Add post'}
+          </button>
+        </div>
         </div>
       );
 
 }
+
 
 export default CreatePost;

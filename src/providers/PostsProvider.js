@@ -1,5 +1,4 @@
 import { createContext } from 'react';
-
 import { useProvidePosts } from '../hooks';
 
 const initialState = {
@@ -9,6 +8,7 @@ const initialState = {
 };
 
 export const PostsContext = createContext(initialState);
+
 
 export const PostsProvider = ({ children }) => {
   const posts = useProvidePosts();

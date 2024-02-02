@@ -16,11 +16,10 @@ const UserProfile = () => {
   const { addToast } = useToasts();
   const history = useNavigate();
   const auth = useAuth();
-
+  
   useEffect(() => {
     const getUser = async () => {
       const response = await fetchUserProfile(userId);
-      console.log('response', response);
 
       if (response.success) {
         setUser(response.data.user);
@@ -30,7 +29,6 @@ const UserProfile = () => {
         });
         return history.push('/');
       }
-
       setLoading(false);
     };
 
@@ -40,7 +38,6 @@ const UserProfile = () => {
   if (loading) {
     return <Loader />;
   }
-  // console.log('user', user);
 
   const checkIfUserIsAFriend = () => {
     const friends = auth.user.friends;
@@ -62,8 +59,7 @@ const UserProfile = () => {
 
     if(response.success){
       const friendship = auth.user.friends.filter(
-        (friend) => friend.to_user._id == userId
-      );
+        (friend) => friend.to_user._id == userId );
 
       auth.updateUserFriends(false, friendship[0]);
       addToast('Friend removed successfully', {
@@ -74,7 +70,6 @@ const UserProfile = () => {
         appearance: 'error',
       })
     }
-
     setrequestInProgress(false);
   }
 
@@ -95,7 +90,6 @@ const UserProfile = () => {
           appearance: 'error',
         })
       }
-
       setrequestInProgress(false);
   }
 
@@ -115,7 +109,6 @@ const UserProfile = () => {
 
       <div className={styles.field}>
         <div className={styles.fieldLabel}>Name</div>
-
         <div className={styles.fieldValue}>{user.name}</div>
       </div>
 
@@ -140,5 +133,6 @@ const UserProfile = () => {
     </div>
   );
 };
+
 
 export default UserProfile;

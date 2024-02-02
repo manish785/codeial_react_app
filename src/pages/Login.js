@@ -1,76 +1,99 @@
-import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
-
+import {useState, useEffect} from 'react';
+import { Navigate, useNavigate} from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
-
-import styles from '../styles/login.module.css';
 import { useAuth } from '../hooks';
+import { BG_URL } from '../utils/constants';
+
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loggingIn, setLoggingIn] = useState(false);
-  const { addToast } = useToasts();
-  const auth = useAuth();
+    const [email, setEmail] = useState(''); 
+    const [password, setPassword] = useState('');
+    const [loginIn, setLoginIn] = useState('');
+    
+    const auth = useAuth();
+    const { addToast } = useToasts();
+    const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoggingIn(true);
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+        setLoginIn(true);
 
-    if (!email || !password) {
-      return addToast('Please enter both email and password', {
-        appearance: 'error',
-      });
-    }
+        let error = false;
 
-    const response = await auth.login(email, password);
+        if(!email || !password){
+            addToast('Please fill all the required fields', {
+                appearance: 'error',
+                autoDismiss: true
+            })
+            
+            error = true
+        }
 
-    if (response.success) {
-      addToast('Successfully logged in', {
-        appearance: 'success',
-      });
-    } else {
-      addToast(response.message, {
-        appearance: 'error',
-      });
-    }
+        if(error){
+            return setLoginIn(false);
+        }
 
-    setLoggingIn(false);
-  };
+        const response = await auth.login(email, password);
+        if(response.success){
+            setLoginIn(false);
 
-  if (auth.user) {
-    return <Navigate to="/" />;
-  }
+            addToast('User Login Successfully', {
+                appearance: 'success',
+                autoDismiss: true
+            })
+            navigate('/home-page');
+        }else{
+            addToast(response.message, {
+                appearance: 'error',
+                autoDismiss: true
+            })
+        }
 
-  return (
-    <form className={styles.loginForm} onSubmit={handleSubmit}>
-      <span className={styles.loginSignupHeader}>Log In</span>
+        setLoginIn(false);
+    }  
 
-      <div className={styles.field}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
-
-      <div className={styles.field}>
-        <input
-          type="password"
-          placeholder="Paasword"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-
-      <div className={styles.field}>
-        <button disabled={loggingIn}>
-          {loggingIn ? 'Logging in...' : 'Log In'}
-        </button>
-      </div>
-    </form>
-  );
-};
+    return(
+        <div className=''>
+            <div className='absolute'>
+                <img 
+                    className='w-screen h-screen object-cover'
+                    src={BG_URL}
+                    alt='BG_URL'
+                />
+            </div>
+            <form
+             className='mt-[150px] absolute left-0 right-0 w-[70%] md:w-[70%] xl:w-[25%] p-4 md:p-8 mx-auto text-white bg-blue-500 rounded-lg my-36 bg-opacity-888'
+             onClick={handleFormSubmit}
+            >
+            <h1 className='font-bold text-xl items-center m-3 p-3'>Sign In</h1>
+            <div>
+            <input
+                className='p-4 rounded-md my-2 w-full  bg-[#333333] border-b-2 border-transparent focus:border-b-2 focus:outline-0'
+                type='email'
+                placeholder='Email'
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                />
+            </div>
+            <div>
+            <input
+                className='p-4 rounded-md my-2 w-full  bg-[#333333] border-b-2 border-transparent focus:border-b-2 focus:outline-0'
+                type='password'
+                placeholder='Password'
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                />
+            </div>
+            <div>
+                <button className='p-4 my-6 rounded-md bg-blue-800 hover:bg-[#d6180b] w-full font-medium' onClick={handleFormSubmit}>
+                    Submit 
+                </button>
+            </div>
+            </form>
+        </div>
+    )
+}
 
 export default Login;

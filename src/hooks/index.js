@@ -17,32 +17,34 @@ import {
 } from '../utils';
 
 export const useAuth = () => {
+  // It hold the intialValue which we pass
   return useContext(AuthContext);
 };
 
 export const useProvideAuth = () => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const getUser = async () => {
-      const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
+    useEffect(() => {
+      const getUser = async () => {
+        const userToken = getItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
 
-      if (userToken) {
-        const user = jwt(userToken);
-        const response = await fetchUserFriends();
+        if (userToken) {
+          const user = jwt(userToken);
+          const response = await fetchUserFriends();
 
-        let friends = [];
+          let friends = [];
 
-        if (response.success) {
-          friends = response.data.friends;
-        }
+          if (response.success) {
+            friends = response.data.friends;
+          }
+  
 
         setUser({
           ...user,
           friends,
         });
-      }
+       }
 
       setLoading(false);
     };
@@ -51,64 +53,63 @@ export const useProvideAuth = () => {
   }, []);
 
   const updateUser = async (userId, name, password, confirmPassword) => {
-    const response = await editProfile(userId, name, password, confirmPassword);
+      const response = await editProfile(userId, name, password, confirmPassword);
 
-    console.log('response', response);
-    if (response.success) {
-      setUser(response.data.user);
-      setItemInLocalStorage(
-        LOCALSTORAGE_TOKEN_KEY,
-        response.data.token ? response.data.token : null
-      );
-      return {
-        success: true,
-      };
-    } else {
-      return {
-        success: false,
-        message: response.message,
-      };
-    }
+      if (response.success) {
+        setUser(response.data.user);
+        setItemInLocalStorage(
+          LOCALSTORAGE_TOKEN_KEY,
+          response.data.token ? response.data.token : null
+        );
+        return {
+          success: true,
+        };
+      } else {
+        return {
+          success: false,
+          message: response.message,
+        };
+      }
   };
 
   const login = async (email, password) => {
-    const response = await userLogin(email, password);
+      const response = await userLogin(email, password);
 
-    if (response.success) {
-      setUser(response.data.user);
-      setItemInLocalStorage(
-        LOCALSTORAGE_TOKEN_KEY,
-        response.data.token ? response.data.token : null
-      );
-      return {
-        success: true,
-      };
-    } else {
-      return {
-        success: false,
-        message: response.message,
-      };
-    }
+      if (response.success) {
+        setUser(response.data.user);
+        setItemInLocalStorage(
+          LOCALSTORAGE_TOKEN_KEY,
+          response.data.token ? response.data.token : null
+        );
+        return {
+          success: true,
+        };
+      } else {
+        return {
+          success: false,
+          message: response.message,
+        };
+      }
   };
 
   const signup = async (name, email, password, confirmPassword) => {
-    const response = await register(name, email, password, confirmPassword);
+      const response = await register(name, email, password, confirmPassword);
 
-    if (response.success) {
-      return {
-        success: true,
-      };
-    } else {
-      return {
-        success: false,
-        message: response.message,
-      };
-    }
+      if (response.success) {
+        return {
+          success: true,
+        };
+      } else {
+        return {
+          success: false,
+          message: response.message,
+        };
+      }
   };
 
   const logout = () => {
-    setUser(null);
-    removeItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
+      setUser(null);
+      removeItemFromLocalStorage(LOCALSTORAGE_TOKEN_KEY);
   };
 
   const updateUserFriends = (addFriend, friend) => {
@@ -141,9 +142,11 @@ export const useProvideAuth = () => {
   };
 };
 
+
 export const usePosts = () => {
   return useContext(PostsContext);
 };
+
 
 export const useProvidePosts = () => {
   const [posts, setPosts] = useState(null);

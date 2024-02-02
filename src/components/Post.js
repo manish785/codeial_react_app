@@ -8,6 +8,7 @@ import { usePosts } from '../hooks';
 import styles from '../styles/home.module.css';
 import { Comment } from './';
 
+
 const Post = ({ post }) => {
   const [comment, setComment] = useState('');
   const [creatingComment, setCreatingComment] = useState(false);
@@ -117,8 +118,10 @@ const Post = ({ post }) => {
   );
 };
 
+
 Post.propTypes = {
   posts: PropTypes.object.isRequired,
 };
+
 
 export default Post;
