@@ -11,6 +11,7 @@ import {
 
 import styles from '../styles/navbar.module.css';
 import { useAuth } from '../hooks';
+import useOnlineStatus from '../hooks/useOnlineStatus';
 import { searchUsers } from '../api';
 
 const Navbar = () => {
@@ -20,6 +21,8 @@ const Navbar = () => {
     const [loading, setLoading] = useState(true);
     const auth = useAuth();
     const navigate = useNavigate();
+
+    const onlineStatus = useOnlineStatus();
 
     useEffect(()=>{
       const fetchUsers = async () =>{
@@ -111,6 +114,13 @@ const Navbar = () => {
       </div>
 
       <div className={styles.rightNav}>
+        {auth.user && (
+          <div className=''>
+            <ul>
+              <li className='mr-16 mt-2'>Online Status :  {onlineStatus ? "✅" : "🚫"}</li>
+            </ul>
+          </div>
+        )}
         {auth.user && (
           <div className={styles.user}>
             <Link to="/settings">
