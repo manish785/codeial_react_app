@@ -16,6 +16,21 @@ const SignUp = () => {
     const { addToast } = useToasts();
     const navigate = useNavigate();
 
+    const getUser = {
+        name: 'Test',
+        email: 'test12345@gmail.com',
+        password: 'test@12345',
+        confirmPasword: 'test@12345'
+    }
+
+    const guestUserHandler = (event) => {
+        event.preventDefault();
+        setName(getUser.name);
+        setEmail(getUser.email);
+        setPassword(getUser.password);
+        setConfirmPassword(getUser.confirmPasword)
+    }
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setSignInUp(true);
@@ -61,9 +76,9 @@ const SignUp = () => {
         setSignInUp(false);
     }
 
-    // if(auth.user){
-    //     return <Navigate to='/'/>s
-    // }
+    if(auth.user){
+        navigate('/login');
+    }
 
     return(
         <div className=''>
@@ -75,7 +90,7 @@ const SignUp = () => {
                 />
             </div>
             <form 
-                className='mt-[80px] absolute left-0 right-0 w-[70%] md:w-[70%] xl:w-[25%] p-4 md:p-8 mx-auto text-white bg-blue-500 rounded-lg my-36 bg-opacity-888' 
+                className='mt-[80px] absolute left-0 right-0 w-[400px] md:w-[400px] xl:w-[400px] p-4 md:p-8 mx-auto text-white bg-blue-500 rounded-lg my-36 bg-opacity-888' 
                 onSubmit={handleFormSubmit}
             >
             <h1 className='font-bold text-xl items-center m-3 p-3'>Sign Up</h1>
@@ -117,7 +132,12 @@ const SignUp = () => {
                     />
                 </div>
                 <div>
-                    <button className='p-4 my-6 rounded-md bg-blue-800 hover:bg-[#d6180b] w-full font-medium' onClick={handleFormSubmit}>
+                    <button className='p-4 my-5 rounded-md bg-blue-800 hover:bg-[#d6180b] w-full font-medium' onClick={guestUserHandler}>
+                        Add Guest Credentials
+                    </button>
+                </div>
+                <div>
+                    <button className='p-4 my-4 rounded-md bg-blue-800 hover:bg-[#d6180b] w-full font-medium' onClick={handleFormSubmit}>
                         Submit 
                     </button>
                 </div>

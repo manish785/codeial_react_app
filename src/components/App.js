@@ -23,8 +23,8 @@ function App() {
 
   const routes = (
     <Routes>
-      <Route path="/" element={<Signup />} />
-      <Route path="/login" element={<Login />} />
+      <Route path="/sign-up" element={<Signup />} />
+      <Route path="/" element={<Login />} />
       <Route path="/home-page" element={<Home />} />
       
       {/* Protected routes */}

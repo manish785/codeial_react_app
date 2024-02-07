@@ -14,6 +14,18 @@ const Login = () => {
     const { addToast } = useToasts();
     const navigate = useNavigate();
 
+    const getUser = {
+        email: 'test1234@gmail.com',
+        password: 'test@1234'
+    }
+
+    const guestUserHandler = (event) => {
+        event.preventDefault();
+        setEmail(getUser.email);
+        setPassword(getUser.password);
+    }
+
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setLoginIn(true);
@@ -62,7 +74,7 @@ const Login = () => {
                 />
             </div>
             <form
-             className='mt-[150px] absolute left-0 right-0 w-[70%] md:w-[70%] xl:w-[25%] p-4 md:p-8 mx-auto text-white bg-blue-500 rounded-lg my-36 bg-opacity-888'
+             className='mt-[110px] absolute left-0 right-0 w-[70%] md:w-[70%] xl:w-[25%] p-4 md:p-8 mx-auto text-white bg-blue-500 rounded-lg my-36 bg-opacity-888'
              onClick={handleFormSubmit}
             >
             <h1 className='font-bold text-xl items-center m-3 p-3'>Sign In</h1>
@@ -85,6 +97,11 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 />
+            </div>
+            <div>
+                <button className='p-4 my-5 rounded-md bg-blue-800 hover:bg-[#d6180b] w-full font-medium' onClick={guestUserHandler}>
+                    Add Guest Credentials
+                </button>
             </div>
             <div>
                 <button className='p-4 my-6 rounded-md bg-blue-800 hover:bg-[#d6180b] w-full font-medium' onClick={handleFormSubmit}>
