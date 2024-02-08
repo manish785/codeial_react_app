@@ -15,8 +15,8 @@ const Login = () => {
     const navigate = useNavigate();
 
     const getUser = {
-        email: 'test1234@gmail.com',
-        password: 'test@1234'
+        email: 'test12345@gmail.com',
+        password: 'test@12345'
     }
 
     const guestUserHandler = (event) => {

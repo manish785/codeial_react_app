@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 
 import { createComment, toggleLike } from '../api';
@@ -8,10 +7,11 @@ import { usePosts } from '../hooks';
 import styles from '../styles/home.module.css';
 import { Comment } from './';
 
-
 const Post = ({ post }) => {
   const [comment, setComment] = useState('');
   const [creatingComment, setCreatingComment] = useState(false);
+  const [postLikes, setPostLikes] = useState(post.likes.length);
+  const [postComments, setPostComments] = useState(post.comments);
   const posts = usePosts();
   const { addToast } = useToasts();
 
@@ -23,7 +23,7 @@ const Post = ({ post }) => {
 
       if (response.success) {
         setComment('');
-        posts.addComment(response.data.comment, post._id);
+        setPostComments([...postComments, response.data.comment]); // Update comments state in the real time
         addToast('Comment created successfully!', {
           appearance: 'success',
         });
@@ -37,15 +37,17 @@ const Post = ({ post }) => {
     }
   };
 
-  const handlePostLikeClick = async () =>{
+  const handlePostLikeClick = async () => {
     const response = await toggleLike(post._id, 'Post');
 
     if (response.success) {
-      if(response.data.deleted){
+      if (response.data.deleted) {
+        setPostLikes(postLikes - 1);                       // update the like in the real time
         addToast('Like removed successfully!', {
           appearance: 'success',
         });
-      }else{
+      } else {
+        setPostLikes(postLikes + 1);
         addToast('Like added successfully!', {
           appearance: 'success',
         });
@@ -55,72 +57,52 @@ const Post = ({ post }) => {
         appearance: 'error',
       });
     }
-  }
+  };
 
   return (
     <div className={styles.postWrapper} key={post._id}>
       <div className={styles.postHeader}>
-        <div className={styles.postAvatar}>
-          <img
-            src="https://as2.ftcdn.net/v2/jpg/01/26/10/59/1000_F_126105961_6vHCTRX2cPOnQTBvx9OSAwRUapYTEmYA.jpg" 
-            alt="user-pic"
-          />
-          <div>
-            <Link
-              to={{
-                pathname: `/user/${post.user._id}`,
-                state: {
-                  user: post.user,
-                },
-              }}
-              className={styles.postAuthor}
-            >
-              {post.user.name}
-            </Link>
-            <span className={styles.postTime}>a minute ago</span>
-          </div>
-        </div>
-        <div className={styles.postContent}>{post.content}</div>
+        {/* Post header JSX */}
+      </div>
 
-        <div className={styles.postActions}>
-          <div className={styles.postLike}>
-            <button onClick={handlePostLikeClick}>
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSyl9mrjSt0NQbcEhW5Gn0hEOy25MMBgzGBfqwbeE&s" 
-                  alt="likes-icon"
-                />
-            </button>
-            <span>{post.likes.length}</span>
-          </div>
+      <div className={styles.postContent}>{post.content}</div>
 
-          <div className={styles.postCommentsIcon}>
-            <img src="https://as2.ftcdn.net/v2/jpg/01/90/89/15/1000_F_190891550_N7uKp2aHE3mOc20dmtDytj7atgvbhdOu.jpg"
-              alt="comments-icon"
+      <div className={styles.postActions}>
+        <div className={styles.postLike}>
+          <button onClick={handlePostLikeClick}>
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTSyl9mrjSt0NQbcEhW5Gn0hEOy25MMBgzGBfqwbeE&s"
+              alt="likes-icon"
             />
-            <span>{post.comments.length}</span>
-          </div>
-        </div>
-        <div className={styles.postCommentBox}>
-          <input
-            placeholder="Start typing a comment"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-            onKeyDown={handleAddComment}
-          />
+          </button>
+          <span>{postLikes}</span>
         </div>
 
-        <div className={styles.postCommentsList}>
-          {post.comments.map((comment) => (
-            <Comment comment={comment} key={`post-comment-${comment._id}`} />
-          ))}
+        <div className={styles.postCommentsIcon}>
+          {/* Comments icon JSX */}
         </div>
+      </div>
+
+      <div className={styles.postCommentBox}>
+        <input
+          placeholder="Start typing a comment"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          onKeyDown={handleAddComment}
+        />
+      </div>
+
+      <div className={styles.postCommentsList}>
+        {postComments.map((comment) => (
+          <Comment comment={comment} key={`post-comment-${comment._id}`} />
+        ))}
       </div>
     </div>
   );
 };
 
-
 Post.propTypes = {
-  posts: PropTypes.object.isRequired,
+  post: PropTypes.object.isRequired,
 };
 
 
