@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 
 import { createComment, toggleLike } from '../api';
@@ -60,12 +61,30 @@ const Post = ({ post }) => {
   };
 
   return (
-    <div className={styles.postWrapper} key={post._id}>
+    <div className={styles.postWrapper} key={`post-${post._id}`}>
       <div className={styles.postHeader}>
-        {/* Post header JSX */}
+        <div className={styles.postAvatar}>
+          <img
+             className='ml-[-10px]'
+             src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoDOwUrek-mbbdkl71-s_ydFmGWWNp48oiucZTh5UaIw&s'
+             alt='user-pic'
+          />
+          <div>
+            <Link
+              to={`/users/${post.user._id}`}
+              state={{user: post.user}}
+              className={styles.postAuthor}
+            >
+                {post.user.name}
+            </Link>
+            <span className={styles.postTime}>a minute ago</span>
+          </div>
+        </div>
       </div>
 
-      <div className={styles.postContent}>{post.content}</div>
+      <div className='ml-[4px]'>
+        {post.content}
+      </div>
 
       <div className={styles.postActions}>
         <div className={styles.postLike}>

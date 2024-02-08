@@ -29,7 +29,7 @@ function App() {
       
       {/* Protected routes */}
       <Route path="/settings" element={<PrivateRoute element={Settings} />} />
-      <Route path="/user/:userId" element={<PrivateRoute element={UserProfile} />} />
+      <Route path="/users/:userId" element={<PrivateRoute element={UserProfile} />} />
 
       <Route path="*" element={<Page404 />} />
     </Routes>
