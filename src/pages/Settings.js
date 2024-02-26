@@ -4,6 +4,7 @@ import { useToasts } from 'react-toast-notifications';
 import styles from '../styles/settings.module.css';
 import { useAuth } from '../hooks';
 
+
 const Settings = () => {
   const auth = useAuth();
   const [editMode, setEditMode] = useState(false);
@@ -49,7 +50,7 @@ const Settings = () => {
       confirmPassword
     );
 
-    console.log('settings response', response);
+   
     if (response.success) {
       setEditMode(false);
       setSavingForm(false);
@@ -66,6 +67,7 @@ const Settings = () => {
     setSavingForm(false);
   };
 
+  
   return (
     <div className={styles.settings}>
       <div className={styles.imgContainer}>

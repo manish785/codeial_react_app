@@ -1,6 +1,7 @@
 import { createContext } from 'react';
 import { useProvidePosts } from '../hooks';
 
+
 const initialState = {
   posts: [],
   loading: true,

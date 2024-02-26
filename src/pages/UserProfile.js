@@ -7,6 +7,7 @@ import { useAuth } from '../hooks';
 import { useEffect, useState } from 'react';
 import { fetchUserProfile, addFriend, removeFriend } from '../api';
 
+
 const UserProfile = () => {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);

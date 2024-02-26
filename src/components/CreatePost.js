@@ -29,6 +29,7 @@ const CreatePost = () => {
         }
         setaddingPost(false);
     };
+
     
     return (
         <div className={styles.createPost}>

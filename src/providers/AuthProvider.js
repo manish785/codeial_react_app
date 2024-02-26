@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import {useProvideAuth} from '../hooks'
+import { useProvideAuth } from '../hooks'
 
 const intialState = {
     user: null,

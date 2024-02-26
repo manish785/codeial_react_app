@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import jwt from 'jwt-decode';
 
+
 import {
   setItemInLocalStorage,
   LOCALSTORAGE_TOKEN_KEY,
@@ -28,7 +29,6 @@ const Navbar = () => {
     const fetchUsers = async () => {
       try {
         const response = await searchUsers(searchText);
-        console.log('Search response:', response);
 
         if (response.success) {
           setResults(response.data.users);
@@ -47,6 +47,7 @@ const Navbar = () => {
       setLoading(false);
     }
   }, [searchText]);
+
 
   useEffect(() => {
     const getUser = async () => {
@@ -82,6 +83,7 @@ const Navbar = () => {
       setResults([]);
     }
   };
+
 
   return (
     <div className={styles.nav}>
@@ -180,5 +182,6 @@ const Navbar = () => {
     </div>
   );
 };
+
 
 export default Navbar;

@@ -24,5 +24,4 @@ export const API_URLS = {
 
 export const BG_URL = 'https://images.pexels.com/photos/633409/pexels-photo-633409.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
 
-
 export const LOCALSTORAGE_TOKEN_KEY = '__codeial_token__';

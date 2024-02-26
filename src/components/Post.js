@@ -8,6 +8,7 @@ import { usePosts } from '../hooks';
 import styles from '../styles/home.module.css';
 import { Comment } from './';
 
+
 const Post = ({ post }) => {
   const [comment, setComment] = useState('');
   const [creatingComment, setCreatingComment] = useState(false);
@@ -60,6 +61,7 @@ const Post = ({ post }) => {
     }
   };
 
+  
   return (
     <div className={styles.postWrapper} key={`post-${post._id}`}>
       <div className={styles.postHeader}>

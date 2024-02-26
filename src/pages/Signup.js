@@ -1,8 +1,9 @@
-import { useState, useEffect} from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useToasts } from 'react-toast-notifications';
 import { useAuth } from '../hooks';
 import { BG_URL } from '../utils/constants';
+
 
 const SignUp = () => {
     const [name, setName] = useState('');
@@ -146,12 +147,5 @@ const SignUp = () => {
     )
 };
 
+
 export default SignUp;
-
-
-
-
-
-
-
-
